@@ -1,10 +1,21 @@
 package ru.hoprik.miroengine.structure.functions;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.play.server.SPlaySoundPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.*;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import ru.hoprik.miroengine.MiroEngine;
+
+import java.util.List;
+import java.util.Objects;
 
 public class SceneFunctions {
     private static final MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -42,5 +53,38 @@ public class SceneFunctions {
 
     public static PlayerEntity getFirstPlayer(){
         return server.getPlayerList().getPlayers().get(0);
+    }
+
+    public static List<ServerPlayerEntity> getPlayers(){
+        return server.getPlayerList().getPlayers();
+    }
+
+    public static World getWorld(){
+        return server.overworld();
+    }
+
+    public static World getWorld(String type){
+        if (Objects.equals(type, "overworld")){
+            return server.getLevel(World.OVERWORLD);
+        }
+        if (Objects.equals(type, "nether")){
+            return server.getLevel(World.NETHER);
+        }
+        if (Objects.equals(type, "end")){
+            return server.getLevel(World.END);
+        }
+        return server.overworld();
+    }
+
+    public static void playSoundGlobal(SoundEvent event, float volume, float pitch){
+        for (ServerPlayerEntity entity: SceneFunctions.getPlayers()){
+            entity.connection.send(new SPlaySoundPacket(event.getLocation(), SoundCategory.MASTER, entity.position(), volume, pitch));
+        }
+    }
+
+    public static void playSoundGlobal(SoundEvent event, SoundCategory category, float volume, float pitch){
+        for (ServerPlayerEntity entity: SceneFunctions.getPlayers()){
+            entity.connection.send(new SPlaySoundPacket(event.getLocation(), category, entity.position(), volume, pitch));
+        }
     }
 }

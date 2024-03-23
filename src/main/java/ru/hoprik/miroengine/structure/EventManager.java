@@ -3,6 +3,7 @@ package ru.hoprik.miroengine.structure;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -35,5 +36,10 @@ public class EventManager {
             root.execScript("S1");
         }
     }
+
+//    @SubscribeEvent
+//    public static void onGuiCheck(GuiOpenEvent event){
+//        MiroEngine.LOGGER.info("Gui open: "+event.getGui().getTitle().getString());
+//    }
 
 }

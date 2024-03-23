@@ -99,11 +99,4 @@ public class Root{
         thread.start();
     }
 
-    private void executerActivatorBackgroundScripts(){
-        Thread thread = new Thread(()->{
-
-        });
-        thread.setName("MiroEngine-thread-background-scripts");
-    }
-
 }
